@@ -1,0 +1,55 @@
+import urllib2
+import sys
+# -*- coding: utf-8 -*-
+
+
+
+def scan(text):
+
+    fd = file(text, "r")
+    result=[]
+    for line in fd.readlines():
+        result.append(list(map(int, line.split(','))))
+    d=result
+    for i in d[0]:
+        now=i
+    b=d[1]
+    n=len(b)
+    newq = []
+    b.sort(reverse=False)
+    sum = 0
+    if now>b[n-1]:
+        for j in b[n-1::-1]:
+            newq.append(j)
+        sum=now-b[0]
+    elif now<=b[0]:
+        for j in b[0:n:]:
+            newq.append(j)
+        sum=b[n-1]-now
+    else:    #between
+        k=0
+        while(b[k]<now):
+            k=k+1
+        l=k-1;
+        r=k;
+        x = int(b[l])
+        y = int(b[r])
+        if(now-x<=y-now):
+            for j in b[l:-1]:
+                newq.append(j)
+            for j in b[r:n]:
+                newq.append(j)
+            sum = now + b[n-1]
+
+        else:
+            for j in b[r:n:+1]:
+                newq.append(j)
+            for j in b[l::-1]:
+                newq.append(j)
+            sum=2*199-now-b[0]
+    print(newq)
+    print(sum)
+    print('%d %d' %(sum,newq[n-1]))
+
+if __name__=="__main__":
+    scan(sys.argv[1])
