@@ -1,0 +1,75 @@
+import urllib2
+import sys
+# -*- coding: utf-8 -*-
+
+
+
+def fscan(text):
+
+    fd = file(text, "r")
+    result=[]
+    for line in fd.readlines():
+        result.append(list(map(int, line.split(','))))
+    d=result
+    for i in d[0]:
+        now=i
+    b=d[1]
+    qone=[]
+    n=len(b)
+    m=0
+    newq = []
+    sum = 0
+    #print now, b
+    while m<n:
+        for j in b[m:m+10:]:
+            qone.append(j)
+        m=m+10
+        qone.sort(reverse=False)
+        length=len(qone)
+        if now>qone[length-1]:
+            for j in qone[length-1::-1]:
+                newq.append(j)
+            sum += now-qone[0]
+            qone=[]
+            newlen = len(newq)
+            now = newq[newlen - 1]
+        elif now<=qone[0]:
+            for j in qone[0:length]:
+                newq.append(j)
+            sum += qone[length-1]-now
+            qone=[]
+            newlen=len(newq)
+            now = newq[newlen-1]
+        else:    #between
+            k=0
+            while(qone[k]<now):
+                k=k+1
+            l=k-1;
+            r=k;
+            x = int(qone[l])
+            y = int(qone[r])
+            if (now - x <= y - now):
+                for j in qone[l:-1]:
+                    newq.append(j)
+                for j in qone[r:length-1]:
+                    newq.append(j)
+                sum += now + qone[length - 1]
+                qone=[]
+                newlen = len(newq)
+                now = newq[newlen - 1]
+            else :
+                for j in qone[r:length]:
+                    newq.append(j)
+                for i in qone[l::-1]:
+                    newq.append(i)
+                sum += 2 * 199 - now - qone[0]
+                qone = []
+                newlen = len(newq)
+                now = newq[newlen - 1]
+
+    print newq
+    print('%d and %s'%(sum, newq[n-1]))
+
+
+if __name__=="__main__":
+    fscan(sys.argv[1])
