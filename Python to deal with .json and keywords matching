@@ -1,0 +1,41 @@
+
+import json
+import sys
+import re
+
+def search(files, keywords):
+    json_file=open(files)
+    obj = json.load(json_file)
+    kw=keywords
+    newd = dict()
+    def process(kw,value):
+        kw=kw.lower()
+        value=value.lower()
+        if value.find(kw)>0:
+            return 1
+        else:
+            return -1
+
+
+
+    for node in obj["data"]:
+        paragraphs = node["paragraphs"]
+        for qaq in paragraphs:
+            qas = qaq["qas"]
+            for pap in qas:
+                questions = pap["question"]
+                answers=pap["answers"]
+                id=pap["id"]
+                anws=answers[0]
+                text=anws["text"]
+                process(kw,questions)
+                #newd.update(id=id, questions=questions, answers=text)
+                if process(kw,questions)==1:
+                    newd=dict(id=id, questions=questions, answers=text)
+                    newd = json.dumps(newd)
+                    print(newd)
+                else:
+                    break
+                #print(questions)
+if __name__=="__main__":
+    search(sys.argv[1], sys.argv[2])
