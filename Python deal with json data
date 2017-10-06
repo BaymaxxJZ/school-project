@@ -1,0 +1,60 @@
+# -*- coding: utf-8 -*-
+import json
+import sys
+import re
+
+a, b, c, d, e, f, g, h, i = (0 for i in range(9))
+
+
+def stats(files):
+   # with open(file) as json_file:
+    jsonfile=open(files)
+    obj = json.load(jsonfile)
+    def process(value):
+        global a,b,c,d,e,f,g,h,i
+        value = value.strip()
+        value = value.lower()
+        if value.startswith('which'):
+            a=a+1
+        if value.startswith('what'):
+            b=b+1
+        if value.startswith('how'):
+            if value.startswith('how many'):
+                c=c+1
+            elif value.startswith('how much'):
+                d=d+1
+            else:
+                e=e+1
+        if value.startswith('when'):
+            f=f+1
+        if value.startswith('who'):
+            if value.startswith('whom'):
+                h=h+1
+            else:
+                g = g + 1
+        if value.startswith('where'):
+            i=i+1
+        return ()
+    for node in obj["data"]:
+        paragraphs = node["paragraphs"]
+        for qaq in paragraphs:
+            qas = qaq["qas"]
+            for pap in qas:
+                question = pap["question"]
+                process(question)
+               # print(question)
+    print("how:%s,how many:%s,how much:%s,what:%s,when:%s,where:%s,which:%s,who:%s,whom:%s" %(e,c,d,b,f,i,a,g,h))
+if __name__=="__main__":
+    stats(sys.argv[1])
+
+
+
+
+# from collections import Counter
+#import collections
+#with open('lax.json') as f:
+#f=open("qa.json")
+#obj=json.load(f)
+#print(QA)
+#z=obj['data'][3]['paragraphs'][0]['qas'][0]['question']
+#print(z)
